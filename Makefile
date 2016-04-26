@@ -16,3 +16,5 @@ clean:
 test: all
 	$(CC) -Isrc/ -L. -Wall test/simple.c -lslab -o test/simple
 	env LD_LIBRARY_PATH=. ./test/simple
+	$(CC) -Isrc/ -L. -Wall test/intcache.c -lslab -o test/intcache
+	env LD_LIBRARY_PATH=. ./test/intcache

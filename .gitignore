@@ -3,4 +3,4 @@ libslab.so
 src/*.o
 test/*.o
 test/simple
-test/multislab
+test/intcache
