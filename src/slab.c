@@ -120,7 +120,7 @@ slab_cache_alloc(struct slab_cache *cache) {
     return NULL;
   }
 
-  void *obj_in_slab = &slab->buf + (cache->obj_size * slab->used);
+  void *obj_in_slab = (void *)&slab->buf + (cache->obj_size * slab->used);
   if (cache->constructor != NULL) {
     (*cache->constructor)(obj_in_slab);
   }
