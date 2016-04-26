@@ -1,2 +1,6 @@
 libslab.so
 *.swp
+src/*.o
+test/*.o
+test/simple
+test/multislab
