@@ -18,3 +18,5 @@ test: all
 	env LD_LIBRARY_PATH=. ./test/simple
 	$(CC) -Isrc/ -L. -Wall test/intcache.c -lslab -o test/intcache
 	env LD_LIBRARY_PATH=. ./test/intcache
+	$(CC) -Isrc/ -L. -Wall test/multislab.c -lslab -o test/multislab
+	env LD_LIBRARY_PATH=. ./test/multislab

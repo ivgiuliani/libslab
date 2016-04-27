@@ -15,9 +15,14 @@
 struct slab {
   unsigned capacity;
   unsigned used;
-  void *buf;
-
   STAILQ_ENTRY(slab) entries;
+
+  // Keep the buffer as the last item because we allocate a set amount of memory for the whole
+  // struct but the compiler is not aware of that, therefore if attempt to access an item at
+  // buf+4 we won't overflow since the memory is correctly allocated, however if buf was not
+  // the last item, changing the item at buf+8 would change whatever field follows in the
+  // struct.
+  void *buf;
 };
 
 struct slab_cache {
