@@ -6,3 +6,4 @@ test/simple
 test/intcache
 test/multislab
 test/largeobj
+test/constructor

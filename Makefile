@@ -13,6 +13,7 @@ clean:
 	rm -f test/simple
 	rm -f test/multislab
 	rm -f test/largeobj
+	rm -f test/constructor
 
 test: all
 	$(CC) -Isrc/ -L. -Wall test/simple.c -lslab -o test/simple
@@ -23,3 +24,5 @@ test: all
 	env LD_LIBRARY_PATH=. ./test/multislab
 	$(CC) -Isrc/ -L. -Wall test/largeobj.c -lslab -o test/largeobj
 	env LD_LIBRARY_PATH=. ./test/largeobj
+	$(CC) -Isrc/ -L. -Wall test/constructor.c -lslab -o test/constructor
+	env LD_LIBRARY_PATH=. ./test/constructor
