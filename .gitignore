@@ -5,3 +5,4 @@ test/*.o
 test/simple
 test/intcache
 test/multislab
+test/largeobj
