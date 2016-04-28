@@ -1,28 +1,30 @@
 CC=gcc
 CFLAGS=-O2 -ggdb
+SONAME=libslab.so
+
+TESTS = \
+	test/test-simple \
+	test/test-intcache \
+	test/test-multislab \
+	test/test-largeobj \
+	test/test-constructor
 
 .PHONY: clean
 
 all:
 	$(CC) $(CFLAGS) -c -fPIC src/slab.c -o src/slab.o
-	$(CC) $(CFLAGS) -shared -Wl,-soname,libslab.so -o libslab.so -Wall src/slab.o
+	$(CC) $(CFLAGS) -shared -Wl,-soname,$(SONAME) -o $(SONAME) -Wall src/slab.o
 
-clean:
-	rm -f libslab.so
-	rm -f src/*.o
-	rm -f test/simple
-	rm -f test/multislab
-	rm -f test/largeobj
-	rm -f test/constructor
+clean: clean-tests
+	-rm -f libslab.so
+	-rm -f src/*.o
 
-test: all
-	$(CC) -Isrc/ -L. -Wall test/simple.c -lslab -o test/simple
-	env LD_LIBRARY_PATH=. ./test/simple
-	$(CC) -Isrc/ -L. -Wall test/intcache.c -lslab -o test/intcache
-	env LD_LIBRARY_PATH=. ./test/intcache
-	$(CC) -Isrc/ -L. -Wall test/multislab.c -lslab -o test/multislab
-	env LD_LIBRARY_PATH=. ./test/multislab
-	$(CC) -Isrc/ -L. -Wall test/largeobj.c -lslab -o test/largeobj
-	env LD_LIBRARY_PATH=. ./test/largeobj
-	$(CC) -Isrc/ -L. -Wall test/constructor.c -lslab -o test/constructor
-	env LD_LIBRARY_PATH=. ./test/constructor
+clean-tests:
+	-rm -f test/test-*
+
+test/test-%: test/%.c
+	$(CC) -Isrc/ -L. -Wall $< -lslab -o $@
+	@env LD_LIBRARY_PATH=. $(TESTS)
+
+test: all clean-tests $(TESTS)
+

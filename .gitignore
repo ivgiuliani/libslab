@@ -2,8 +2,4 @@ libslab.so
 *.swp
 src/*.o
 test/*.o
-test/simple
-test/intcache
-test/multislab
-test/largeobj
-test/constructor
+test/test-*
