@@ -12,7 +12,6 @@ int
 main(int argc, char **argv) {
   struct slab_cache cache;
   slab_cache_create(&cache, sizeof(obj), NULL, NULL);
-  printf("slab_cache_create() ok.\n");
 
   assert(cache.obj_size == sizeof(obj));
 
@@ -22,30 +21,20 @@ main(int argc, char **argv) {
 
   o1 = slab_cache_alloc(&cache);
   assert(o1 != NULL);
-  printf("o1 = slab_cache_alloc() ok.\n");
   o2 = slab_cache_alloc(&cache);
   assert(o2 != NULL);
-  printf("o2 = slab_cache_create() ok.\n");
   o3 = slab_cache_alloc(&cache);
   assert(o3 != NULL);
-  printf("o3 = slab_cache_create() ok.\n");
 
   o1->value = 1;
-  printf("o1->value = 1 ok.\n");
   o2->value = 2;
-  printf("o2->value = 2 ok.\n");
   o3->value = 3;
-  printf("o3->value = 3 ok.\n");
 
   slab_cache_free(&cache, o3);
-  printf("slab_cache_free(o3) ok.\n");
   slab_cache_free(&cache, o2);
-  printf("slab_cache_free(o2) ok.\n");
   slab_cache_free(&cache, o1);
-  printf("slab_cache_free(o1) ok.\n");
 
   slab_cache_destroy(&cache);
-  printf("slab_cache_destroy ok.\n");
 
   assert(cache.slab_count == 0);
 
