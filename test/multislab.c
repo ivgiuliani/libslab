@@ -28,7 +28,7 @@ main(int argc, char **argv) {
   }
 
   int total_obj_count = 0;
-  STAILQ_FOREACH(slab, &cache.__slabs, entries) {
+  SLIST_FOREACH(slab, &cache.__slabs, entries) {
     total_obj_count += slab->used;
   }
   assert(total_obj_count == ITEM_COUNT);
@@ -40,7 +40,7 @@ main(int argc, char **argv) {
     slab_cache_free(&cache, obj_array[i]);
   }
 
-  STAILQ_FOREACH(slab, &cache.__slabs, entries) {
+  SLIST_FOREACH(slab, &cache.__slabs, entries) {
     slab_count++;
   }
   assert(slab_count == 0);

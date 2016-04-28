@@ -15,7 +15,7 @@
 struct slab {
   unsigned capacity;
   unsigned used;
-  STAILQ_ENTRY(slab) entries;
+  SLIST_ENTRY(slab) entries;
 
   // Keep the buffer as the last item because we allocate a set amount of memory for the whole
   // struct but the compiler is not aware of that, therefore if attempt to access an item at
@@ -31,7 +31,7 @@ struct slab_cache {
   void (*destructor)(void *);
 
   unsigned int slab_count;
-  STAILQ_HEAD(, slab) __slabs;
+  SLIST_HEAD(, slab) __slabs;
 };
 
 void

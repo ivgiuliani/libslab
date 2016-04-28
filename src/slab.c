@@ -73,7 +73,7 @@ __slab_is_empty(struct slab *slab) {
 struct slab *
 __slab_pick(struct slab_cache *cache) {
   struct slab *slab = NULL;
-  STAILQ_FOREACH(slab, &cache->__slabs, entries) {
+  SLIST_FOREACH(slab, &cache->__slabs, entries) {
     if (!__slab_is_full(slab)) {
       break;
     }
@@ -86,7 +86,7 @@ struct slab *
 __slab_grow(struct slab_cache *cache) {
   struct slab *slab = __slab_alloc(cache);
   cache->slab_count++;
-  STAILQ_INSERT_TAIL(&cache->__slabs, slab, entries);
+  SLIST_INSERT_HEAD(&cache->__slabs, slab, entries);
   return slab;
 }
 
@@ -100,14 +100,14 @@ slab_cache_create(struct slab_cache *cache,
   cache->constructor = constructor;
   cache->destructor = destructor;
   cache->slab_count = 0;
-  STAILQ_INIT(&cache->__slabs);
+  SLIST_INIT(&cache->__slabs);
 }
 
 void
 slab_cache_destroy(struct slab_cache *cache) {
   struct slab *slab, *slab_tmp;
-  STAILQ_FOREACH_SAFE(slab, &cache->__slabs, entries, slab_tmp) {
-    STAILQ_REMOVE(&cache->__slabs, slab, slab, entries);
+  SLIST_FOREACH_SAFE(slab, &cache->__slabs, entries, slab_tmp) {
+    SLIST_REMOVE(&cache->__slabs, slab, slab, entries);
     __slab_free(slab);
     cache->slab_count--;
   }
@@ -136,7 +136,7 @@ slab_cache_free(struct slab_cache *cache, void *obj) {
   struct slab *slab, *slab_tmp;
   void *slab_start_addr, *slab_end_addr;
 
-  STAILQ_FOREACH_SAFE(slab, &cache->__slabs, entries, slab_tmp) {
+  SLIST_FOREACH_SAFE(slab, &cache->__slabs, entries, slab_tmp) {
     slab_start_addr = &slab->buf;
     slab_end_addr = slab_start_addr + __get_slab_size() - sizeof(struct slab);
 
@@ -145,7 +145,7 @@ slab_cache_free(struct slab_cache *cache, void *obj) {
       slab->used--;
 
       if (__slab_is_empty(slab)) {
-        STAILQ_REMOVE(&cache->__slabs, slab, slab, entries);
+        SLIST_REMOVE(&cache->__slabs, slab, slab, entries);
         cache->slab_count--;
 
         void *obj_in_slab;

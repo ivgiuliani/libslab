@@ -32,7 +32,7 @@ main(int argc, char **argv) {
 
   int slab_count = 0;
   struct slab *slab;
-  STAILQ_FOREACH(slab, &cache.__slabs, entries) {
+  SLIST_FOREACH(slab, &cache.__slabs, entries) {
     slab_count++;
   }
   assert(slab_count == 0);
