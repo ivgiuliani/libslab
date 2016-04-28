@@ -46,16 +46,17 @@ main(int argc, char **argv) {
   for (int i = 0; i < 100; i++) {
     slab_cache_free(&cache, objs[i]);
     if (cache.slab_count < old_slab_count) {
-      // We deleted the slab, the destructor should have been invoked but memory gets
-      // also reclaimed so there's no way to know if that has actually worked.
+      // We deleted the slab but we can't access the memory since the slab might have
+      // been reclaimed, so there's no way to know if that has actually worked.
       old_slab_count = cache.slab_count;
     } else {
-      // It works because unless the slab gets freed (see above0 the memory is not actually
-      // deallocated until we destroy the cache.
-      assert(objs[i][0] == 'e');
-      assert(objs[i][1] == 'f');
-      assert(objs[i][2] == 'g');
-      assert(objs[i][3] == 'h');
+      // It works because unless the slab gets freed (see above) the memory is not actually
+      // deallocated until we destroy the cache, and the constructor only runs when the
+      // slab gets freed.
+      assert(objs[i][0] == 'a');
+      assert(objs[i][1] == 'b');
+      assert(objs[i][2] == 'c');
+      assert(objs[i][3] == 'd');
     }
   }
 

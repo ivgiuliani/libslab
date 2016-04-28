@@ -39,6 +39,11 @@ __slab_alloc(struct slab_cache *cache) {
   slab->capacity = max_items;
   slab->used = 0;
 
+  for (int i = 0; cache->constructor != NULL && i < slab->capacity; i++) {
+    void *obj_in_slab = (void *)&slab->buf + (cache->obj_size * i);
+    (*cache->constructor)(obj_in_slab);
+  }
+
   return slab;
 }
 
@@ -121,10 +126,6 @@ slab_cache_alloc(struct slab_cache *cache) {
   }
 
   void *obj_in_slab = (void *)&slab->buf + (cache->obj_size * slab->used);
-  if (cache->constructor != NULL) {
-    (*cache->constructor)(obj_in_slab);
-  }
-
   slab->used++;
 
   return obj_in_slab;
@@ -143,13 +144,16 @@ slab_cache_free(struct slab_cache *cache, void *obj) {
     if (is_obj_in_slab) {
       slab->used--;
 
-      if (cache->destructor != NULL) {
-        (*cache->destructor)(obj);
-      }
-
       if (__slab_is_empty(slab)) {
         STAILQ_REMOVE(&cache->__slabs, slab, slab, entries);
         cache->slab_count--;
+
+        void *obj_in_slab;
+        for (int i = 0; cache->destructor != NULL && i < slab->capacity; i++) {
+          obj_in_slab = (void *)&slab->buf + (cache->obj_size * i);
+          (*cache->destructor)(obj);
+        }
+
         __slab_free(slab);
       }
     }
