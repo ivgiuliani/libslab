@@ -23,7 +23,7 @@ clean-tests:
 	-rm -f test/test-*
 
 test/test-%: test/%.c
-	$(CC) -Isrc/ -L. -Wall $< -lslab -o $@
+	$(CC) -g -Isrc/ -L. -Wall $< -lslab -o $@
 	@env LD_LIBRARY_PATH=. $@
 
 test: all clean-tests $(TESTS)
