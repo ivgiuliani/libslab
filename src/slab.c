@@ -32,7 +32,6 @@ __slab_alloc(struct slab_cache *cache) {
       PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED,
       -1, 0
   );
-  memset(slab, 0, __get_slab_size());
 
   ssize_t available_space = __get_slab_size() - sizeof(struct slab);
   unsigned max_items = available_space / cache->obj_size;
