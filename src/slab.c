@@ -7,8 +7,8 @@
 #include <sys/mman.h>
 
 // We have to ship our own version of queue.h because the one bundled with
-// Ubuntu is an ancient version that does not provide the _SAFE variations
-// of the list methods.
+// mainstream linux distributions is an ancient version that does not provide
+// the _SAFE variations of the list methods.
 #include "queue.h"
 
 #include "slab.h"
