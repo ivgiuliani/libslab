@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O2 -ggdb
+CFLAGS=-O2 -ggdb -DCASSERT
 SONAME=libslab.so
 
 TESTS = \

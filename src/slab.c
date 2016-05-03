@@ -1,10 +1,16 @@
-#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/mman.h>
+
+#ifdef CASSERT
+#  include <assert.h>
+#  define ASSERT(x) assert((x))
+#else
+#  define ASSERT(x)
+#endif
 
 // We have to ship our own version of queue.h because the one bundled with
 // mainstream linux distributions is an ancient version that does not provide
@@ -18,14 +24,14 @@ static const size_t __get_slab_size() {
   if (page_size == -1) {
     page_size = getpagesize();
   }
-  assert(page_size != 0);
+  ASSERT(page_size != 0);
   return page_size;
 }
 
 
 struct slab *
 __slab_alloc(struct slab_cache *cache) {
-  assert(cache->obj_size <= __get_slab_size());
+  ASSERT(cache->obj_size <= __get_slab_size());
 
   struct slab *slab = (struct slab *) mmap(
       NULL,
