@@ -71,13 +71,23 @@ __slab_is_empty(struct slab *slab) {
  */
 struct slab *
 __slab_pick(struct slab_cache *cache) {
+  // Pick the fullest (yet not completely full) of the slabs so that
+  // we keep memory fragmentation to a minimum.
   struct slab *slab = NULL;
+  struct slab *best_slab = NULL;
   SLIST_FOREACH(slab, &cache->__slabs, entries) {
-    if (!__slab_is_full(slab)) {
-      break;
+    if (!__slab_is_full(slab) &&
+        (best_slab == NULL || slab->used > best_slab->used)) {
+      best_slab = slab;
+
+      if (best_slab->used == best_slab->capacity - 1) {
+        // Can't get any better than this.
+        break;
+      }
     }
   }
-  return slab;
+
+  return best_slab;
 }
 
 
