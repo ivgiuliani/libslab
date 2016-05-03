@@ -100,17 +100,25 @@ __slab_grow(struct slab_cache *cache) {
 }
 
 
-void
+int
 slab_cache_create(struct slab_cache *cache,
                   size_t obj_size,
                   void (*constructor)(void *),
                   void (*destructor)(void *)) {
+  if (obj_size > __get_slab_size() / 2) {
+    // Cannot allocate objects this big.
+    return -1;
+  }
+
   cache->obj_size = obj_size;
   cache->constructor = constructor;
   cache->destructor = destructor;
   cache->slab_count = 0;
   SLIST_INIT(&cache->__slabs);
+
+  return 0;
 }
+
 
 void
 slab_cache_destroy(struct slab_cache *cache) {
@@ -122,6 +130,7 @@ slab_cache_destroy(struct slab_cache *cache) {
   }
   cache->obj_size = 0;
 }
+
 
 void *
 slab_cache_alloc(struct slab_cache *cache) {
@@ -139,6 +148,7 @@ slab_cache_alloc(struct slab_cache *cache) {
 
   return obj_in_slab;
 }
+
 
 void
 slab_cache_free(struct slab_cache *cache, void *obj) {

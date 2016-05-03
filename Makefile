@@ -7,7 +7,8 @@ TESTS = \
 	test/test-intcache \
 	test/test-multislab \
 	test/test-largeobj \
-	test/test-constructor
+	test/test-constructor \
+	test/test-giant
 
 .PHONY: clean
 

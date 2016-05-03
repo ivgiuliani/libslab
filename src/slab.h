@@ -34,7 +34,7 @@ struct slab_cache {
   SLIST_HEAD(, slab) __slabs;
 };
 
-void
+int
 slab_cache_create(struct slab_cache *,
                   size_t,
                   void (*constructor)(void *),
