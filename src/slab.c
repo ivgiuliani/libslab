@@ -14,10 +14,11 @@
 #include "slab.h"
 
 static const size_t __get_slab_size() {
-  static ssize_t page_size = 0;
-  if (page_size == 0) {
+  static ssize_t page_size = -1;
+  if (page_size == -1) {
     page_size = getpagesize();
   }
+  assert(page_size != 0);
   return page_size;
 }
 
