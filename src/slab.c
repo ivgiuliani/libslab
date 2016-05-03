@@ -12,9 +12,9 @@
 #  define ASSERT(x)
 #endif
 
-// We have to ship our own version of queue.h because the one bundled with
-// mainstream linux distributions is an ancient version that does not provide
-// the _SAFE variations of the list methods.
+// We ship our own version of queue.h because the one bundled with
+// mainstream linux distributions is an ancient version that does not
+// provide the _SAFE variations of the list methods.
 #include "queue.h"
 
 #include "slab.h"
