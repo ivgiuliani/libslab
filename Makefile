@@ -8,7 +8,8 @@ TESTS = \
 	test/test-multislab \
 	test/test-largeobj \
 	test/test-constructor \
-	test/test-giant
+	test/test-giant \
+	test/test-benchmark
 
 .PHONY: clean
 
