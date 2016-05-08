@@ -33,6 +33,7 @@ struct slab *
 __slab_alloc(struct slab_cache *cache) {
   ASSERT(cache->obj_size <= __get_slab_size());
 
+  // mmap is necessary to get the memory aligned to page boundaries.
   struct slab *slab = (struct slab *) mmap(
       NULL,
       __get_slab_size(),
