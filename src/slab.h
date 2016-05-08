@@ -31,6 +31,7 @@ struct slab_cache {
   void (*destructor)(void *);
 
   unsigned int slab_count;
+  unsigned int __max_items_per_slab;
   SLIST_HEAD(, slab) __slabs;
 };
 

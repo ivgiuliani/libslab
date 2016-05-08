@@ -41,9 +41,7 @@ __slab_alloc(struct slab_cache *cache) {
       -1, 0
   );
 
-  ssize_t available_space = __get_slab_size() - sizeof(struct slab);
-  unsigned max_items = available_space / cache->obj_size;
-  slab->capacity = max_items;
+  slab->capacity = cache->__max_items_per_slab;
   slab->used = 0;
 
   for (int i = 0; cache->constructor != NULL && i < slab->capacity; i++) {
@@ -122,6 +120,7 @@ slab_cache_create(struct slab_cache *cache,
   cache->constructor = constructor;
   cache->destructor = destructor;
   cache->slab_count = 0;
+  cache->__max_items_per_slab = (__get_slab_size() - sizeof(struct slab)) / cache->obj_size;
   SLIST_INIT(&cache->__slabs);
 
   return 0;
