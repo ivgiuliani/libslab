@@ -182,6 +182,10 @@ slab_cache_free(struct slab_cache *cache, void *obj) {
 
         __slab_free(slab);
       }
+
+      // We found the object and performed any necessary cleanup. No need to further
+      // iterate on the remaining slabs.
+      return;
     }
   }
 }
