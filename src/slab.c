@@ -159,12 +159,14 @@ slab_cache_alloc(struct slab_cache *cache) {
 
 void
 slab_cache_free(struct slab_cache *cache, void *obj) {
+  const ssize_t slab_addr_space = __get_slab_size() - sizeof(struct slab);
+
   struct slab *slab, *slab_tmp;
   void *slab_start_addr, *slab_end_addr;
 
   SLIST_FOREACH_SAFE(slab, &cache->__slabs, entries, slab_tmp) {
     slab_start_addr = &slab->buf;
-    slab_end_addr = slab_start_addr + __get_slab_size() - sizeof(struct slab);
+    slab_end_addr = slab_start_addr + slab_addr_space;
 
     const bool is_obj_in_slab = obj >= slab_start_addr && obj < slab_end_addr;
     if (is_obj_in_slab) {
