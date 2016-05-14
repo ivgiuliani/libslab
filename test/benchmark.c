@@ -11,6 +11,8 @@ typedef struct __obj {
   int value2;
 } obj;
 
+typedef char onebyte[1];
+
 void
 measure(const char *msg,
     struct timespec *start,
@@ -21,9 +23,11 @@ measure(const char *msg,
 int
 main(int argc, char **argv) {
   struct timespec timestart, timestop;
+  struct slab_cache cache;
+
+  // Generic objects.
   obj *array[4096];
 
-  struct slab_cache cache;
   slab_cache_create(&cache, sizeof(obj), NULL, NULL);
 
   clock_gettime(CLOCK_REALTIME, &timestart);
@@ -31,14 +35,36 @@ main(int argc, char **argv) {
     array[i] = slab_cache_alloc(&cache);
   }
   clock_gettime(CLOCK_REALTIME, &timestop);
-  measure("Caching 4096 objects took: %d.%d seconds\n", &timestart, &timestop);
+  measure("Caching 4096 generic objects took: %d.%d seconds\n", &timestart, &timestop);
 
   clock_gettime(CLOCK_REALTIME, &timestart);
   for (int i = 0; i < 4096; i++) {
     slab_cache_free(&cache, array[i]);
   }
   clock_gettime(CLOCK_REALTIME, &timestop);
-  measure("Freeing 4096 objects took: %d.%d seconds\n", &timestart, &timestop);
+  measure("Freeing 4096 generic objects took: %d.%d seconds\n", &timestart, &timestop);
+
+  slab_cache_destroy(&cache);
+
+  // 1 byte objects.
+  onebyte *ob[10000];
+  slab_cache_create(&cache, sizeof(onebyte), NULL, NULL);
+
+  clock_gettime(CLOCK_REALTIME, &timestart);
+  for (int i = 0; i < 10000; i++) {
+    ob[i] = slab_cache_alloc(&cache);
+  }
+  clock_gettime(CLOCK_REALTIME, &timestop);
+  measure("Caching 10000 1-byte objects took: %d.%d seconds\n", &timestart, &timestop);
+
+  clock_gettime(CLOCK_REALTIME, &timestart);
+  for (int i = 0; i < 10000; i++) {
+    slab_cache_free(&cache, ob[i]);
+  }
+  clock_gettime(CLOCK_REALTIME, &timestop);
+  measure("Freeing 10000 1-byte objects took: %d.%d seconds\n", &timestart, &timestop);
+
+  slab_cache_destroy(&cache);
 
   return 0;
 }
