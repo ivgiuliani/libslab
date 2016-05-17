@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 CFLAGS=-O2 -ggdb -DCASSERT
 SONAME=libslab.so
 
