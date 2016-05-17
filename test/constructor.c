@@ -50,13 +50,10 @@ main(int argc, char **argv) {
       // been reclaimed, so there's no way to know if that has actually worked.
       old_slab_count = cache.slab_count;
     } else {
-      // It works because unless the slab gets freed (see above) the memory is not actually
-      // deallocated until we destroy the cache, and the constructor only runs when the
-      // slab gets freed.
-      assert(objs[i][0] == 'a');
-      assert(objs[i][1] == 'b');
-      assert(objs[i][2] == 'c');
-      assert(objs[i][3] == 'd');
+      assert(objs[i][0] == 'e');
+      assert(objs[i][1] == 'f');
+      assert(objs[i][2] == 'g');
+      assert(objs[i][3] == 'h');
     }
   }
 
