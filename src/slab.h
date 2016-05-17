@@ -5,13 +5,6 @@
 #include <unistd.h>
 #include "queue.h"
 
-#if __GNUC__
-#  define __force_inline __attribute__((always_inline)) inline
-#else
-#  define __force_inline inline
-#endif
-
-
 struct slab {
   unsigned capacity;
   unsigned used;

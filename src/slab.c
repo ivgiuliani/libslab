@@ -19,6 +19,9 @@
 
 #include "slab.h"
 
+#define __slab_is_full(slab) (slab->used == slab->capacity)
+#define __slab_is_empty(slab) (slab->used == 0)
+
 static const size_t __get_slab_size() {
   static ssize_t page_size = -1;
   if (page_size == -1) {
@@ -57,19 +60,6 @@ void
 __slab_free(struct slab *slab) {
   munmap(slab, __get_slab_size());
 }
-
-
-__force_inline bool
-__slab_is_full(struct slab *slab) {
-  return slab->used == slab->capacity;
-}
-
-
-__force_inline bool
-__slab_is_empty(struct slab *slab) {
-  return slab->used == 0;
-}
-
 
 /**
  * Finds a slab with at least a free entry or NULL if all the
