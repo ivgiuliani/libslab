@@ -44,6 +44,12 @@ __slab_alloc(struct slab_cache *cache) {
       -1, 0
   );
 
+  // Prefill the memory with a simple pattern to aid debugging.
+  uint32_t *p = (uint32_t *)slab;
+  for (int i = 0; i < __get_slab_size() / sizeof(uint32_t); i++) {
+    p[i] = SLAB_FILL_CONSTRUCT;
+  }
+
   slab->capacity = cache->__max_items_per_slab;
   slab->used = 0;
 

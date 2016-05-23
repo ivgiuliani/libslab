@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include "queue.h"
 
+#define SLAB_FILL_CONSTRUCT 0xAABBCCDD
+
 struct slab {
   unsigned capacity;
   unsigned used;

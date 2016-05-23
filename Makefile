@@ -9,6 +9,7 @@ TESTS = \
 	test/test-largeobj \
 	test/test-constructor \
 	test/test-giant \
+	test/test-fill \
 	test/test-benchmark
 
 .PHONY: clean
